@@ -1,5 +1,5 @@
 # Study
 
-- Javascript
+- [Javascript](https://github.com/joseph0926/study/tree/main/js)
 
-- React
+- [React](https://github.com/joseph0926/study/tree/main/react)
