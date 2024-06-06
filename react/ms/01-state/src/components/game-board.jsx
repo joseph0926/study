@@ -1,10 +1,4 @@
-const initialGameBoard = [
-  [null, null, null],
-  [null, null, null],
-  [null, null, null],
-];
-
-export default function GameBoard({ onSelectSquare, turns }) {
+export default function GameBoard({ onSelectSquare, board }) {
   /*
     이전 상태가 객체 or 배열인 경우 이전 상태를 기반으로 상태를 올바르게 업데이트 하는 방법
     - 불변성을 지키기 위해 이전 상태를 복사한 후 해당 복사본을 변경
@@ -29,17 +23,9 @@ export default function GameBoard({ onSelectSquare, turns }) {
       ```
   */
 
-  let gameBoard = initialGameBoard;
-  for (const turn of turns) {
-    const { square, player } = turn;
-    const { row, col } = square;
-
-    gameBoard[row][col] = player;
-  }
-
   return (
     <ol id="game-board">
-      {gameBoard.map((row, rowIndex) => (
+      {board.map((row, rowIndex) => (
         <li key={rowIndex}>
           <ol>
             {row.map((playerSymbol, colIndex) => (
