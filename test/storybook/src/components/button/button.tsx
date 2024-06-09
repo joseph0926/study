@@ -1,7 +1,6 @@
-import clsx from 'clsx';
 import { ComponentProps } from 'react';
 
-import styles from './button.module.css';
+import { variants, type ButtonVariants } from './button-variants';
 
 /*
   재사용 컴포넌트 구축시 유의점
@@ -9,13 +8,8 @@ import styles from './button.module.css';
     - 예를들어 className: string; type: string ... <- 이런거 자제
   - 대신 react 기본 타입을 활용하자 `ComponentProps<"HTML Tag">` + 추가할 커스텀 속성들,,
 */
-export type ButtonProps = ComponentProps<'button'> & {
-  variant: 'primary' | 'secondary' | 'destructive' | 'ghost';
-  size: 'sm' | 'md' | 'lg';
-};
+export type ButtonProps = ComponentProps<'button'> & ButtonVariants;
 
 export const Button = ({ variant, className, size = 'md', ...props }: ButtonProps) => {
-  let classes = clsx(styles.button, styles[variant], styles[size], className);
-
-  return <button className={classes} {...props} />;
+  return <button className={variants({ variant, size, className })} {...props} />;
 };
