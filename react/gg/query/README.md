@@ -4,6 +4,8 @@
 
 [왜 React Query를 사용하는지](#왜-react-query를-사용하는지)
 
+[QueryClient](#react-quert--queryclient)
+
 ## 왜 React Query를 사용하는지
 
 - 기본적으로 React는 개발자가 `상태` 변화에 대한 처리만 신경 쓰면, 나머지는 React에서 처리해줍니다.
@@ -59,3 +61,42 @@
         2. 서버 소유입니다 => 다수의 사용자가 상태를 변경할 수 있습니다.
         3. 일반적으로 상태가 지속됩니다.
         4. 비동기적으로 서버에서 클라이언트에 도착하기까지 약간의 시간이 걸립니다.
+
+## React Quert / QueryClient
+
+- react-query로 관리되는 모든 데이터는 QueryCache에 존재하고, 이 QueryCache는 QueryClient에 포함 및 관리됩니다.
+- QueryClient는 가장 상위 컴포넌트 밖에서 생성되어야합니다.
+
+  - 이렇게 구성함으로써 애플리케이션이 리렌더링되어도 캐시가 유지됩니다. (정적 객체)
+
+  ```js
+  const queryClient = new QueryClient();
+
+  export default function App() {
+    // ...
+  }
+  ```
+
+- 단, 이렇게 밖에서 생성되었으므로 모든 컴포넌트와 상호작용하기 위해서는 Provider가 필요합니다.
+
+  ```js
+  const queryClient = new QueryClient();
+
+  export default function App() {
+    <QueryClientProvider client={queryClient}>{/* ... */}</QueryClientProvider>;
+  }
+  ```
+
+  - 이렇게 구성하므로써 모든 컴포넌트에서 query cache를 사용 가능해집니다.
+    - 이 QueryClientProvider는 Context API의 의존성 주입 기능을 활용합니다.
+
+- 위의 내용을 조합해보면, 모든 컴포넌트에서 QueryClient에 내장되어있는 QueryCache에 접근 및 사용이 가능하며, queryClient는 정적 객체이므로 애플리케이션의 리렌더링과는 상관없이 캐시가 유지됩니다.
+- 각 컴포넌트에서는 보통 캐시를 `useQuery`훅으로 관리하며, 이 훅은 기본적으로 QueryCache를 구독하고있으며, cache가 변경되면 리렌더링을 수행합니다
+  - 그러면 아래와 같은 의문점이 생깁니다.
+    1. 어떻게 캐시가 변경되는지 아는지
+    - useQuery마다 `queryKey`가 존재하고, queryKey의 캐시에 이미 데이터가 존재하면 useQuery는 해당 데이터를 즉시 반환합니다
+    2. 캐싱될 데이터는 어떻게 가져오는지
+    - useQuery마다 `queryFn`이 존재하고, 캐시된 데이터가 없다면 queryFn을 호출하여 데이터를 가져온 후 queryKey의 캐시에 넣은 다음 반환합니다
+- queryKey와 queryFn의 조건
+  - queryKey: 고유한 키여야함
+  - queryFn: Promise를 반환하는 함수여야함
