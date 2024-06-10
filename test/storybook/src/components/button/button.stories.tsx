@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { Button } from './button';
 
 const meta = {
-  title: 'Button',
+  title: 'Components/Button',
   component: Button,
   args: {
     children: 'Button',
@@ -10,6 +10,19 @@ const meta = {
     size: 'md',
   },
   argTypes: {
+    children: {
+      name: 'Label',
+      control: 'text',
+      description: 'Text to display on the button',
+    },
+    size: {
+      control: 'select',
+      options: ['sm', 'md', 'lg'],
+    },
+    variant: {
+      control: 'select',
+      options: ['primary', 'secondary', 'destructive'],
+    },
     disabled: {
       control: 'boolean',
     },
@@ -32,11 +45,6 @@ export const Secondary: Story = {
 export const Destructive: Story = {
   args: {
     variant: 'destructive',
-  },
-};
-export const Ghost: Story = {
-  args: {
-    variant: 'ghost',
   },
 };
 
