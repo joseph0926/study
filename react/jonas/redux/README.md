@@ -8,6 +8,8 @@
 
 [Middleware](#middleware)
 
+[Redux Toolkit](#redux-toolkit)
+
 ## Redux란?
 
 - 전역 상태 관리 라이브러리
@@ -62,3 +64,15 @@
   2. store로 가는 중간에 middleware가 해당 action을 받아서 비동기 작업을 수행
   3. 예를들어 api 호출을 통해 데이터를 가져왔다면, 데이터를 받자마자 middleware에서 action payload에 해당 데이터를 담음
   4. store에 전달 -> 상태 업데이트
+
+## Redux Toolkit
+
+- Redux를 작성하는 모범사례를 적용해놓은 일종의 Redux 헬퍼 라이브러리
+
+  - 현대에 와서는 Redux의 사용보다 RTK 사용을 권장함
+
+- RTK 장점
+  1. reducer함수에서 `직접적`으로 상태를 변경할 수 있음
+  - RTK를 사용하여 개발자가 작성하는 코드는 상태를 변경하여 불변성을 잃는 것처럼 보이지만, 뒤에서 `immer`라는 라이브러리를 통해 여전히 불변성을 유지시킴
+  2. Action creators를 자동으로 생성해줌
+  3. thunk middleware와 DevTools를 자동으로 설정해줌
