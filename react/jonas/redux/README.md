@@ -72,7 +72,44 @@
   - 현대에 와서는 Redux의 사용보다 RTK 사용을 권장함
 
 - RTK 장점
+
   1. reducer함수에서 `직접적`으로 상태를 변경할 수 있음
+
   - RTK를 사용하여 개발자가 작성하는 코드는 상태를 변경하여 불변성을 잃는 것처럼 보이지만, 뒤에서 `immer`라는 라이브러리를 통해 여전히 불변성을 유지시킴
+
+    - immer란?
+
+      - immer는 프로듀서 함수(producer function) 개념을 사용
+        - 프로듀서 함수는 초안 상태(draft state)를 받아서 이를 수정
+      - immer는 초안 상태를 사용하여 불변성을 유지하면서 새로운 상태를 생성
+      - 즉, 기존 상태를 기반으로 한 초안 상태를 만들고, 그 초안 상태를 변경한 후 새로운 상태를 리턴하는 방법
+
+      ```js
+      import produce from "immer";
+
+      const baseState = [
+        { todo: "Learn Redux", done: true },
+        { todo: "Try immer", done: false },
+      ];
+
+      const nextState = produce(baseState, (draftState) => {
+        draftState.push({ todo: "Tweet about it", done: false });
+        draftState[1].done = true;
+      });
+
+      console.log(baseState);
+      // [
+      //   { todo: "Learn Redux", done: true },
+      //   { todo: "Try immer", done: false }
+      // ]
+
+      console.log(nextState);
+      // [
+      //   { todo: "Learn Redux", done: true },
+      //   { todo: "Try immer", done: true },
+      //   { todo: "Tweet about it", done: false }
+      // ]
+      ```
+
   2. Action creators를 자동으로 생성해줌
   3. thunk middleware와 DevTools를 자동으로 설정해줌
