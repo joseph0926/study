@@ -4,6 +4,8 @@
 
 [React 렌더링](#react-렌더링)
 
+[Effect 관리](#effect-관리)
+
 ## React 렌더링
 
 - React는 기본적으로 사용자 인터페이스를 구축하기 위한 라이브러리임
@@ -159,3 +161,145 @@ export default function App() {
   2. React 컴포넌트가 항상 순수 함수가 아니기 때문에, 즉 props 외에도 다른 요소들이 렌더링에 영향을 줄 수 있기 때문에, 단순히 props가 변경될 때만 자식 컴포넌트를 다시 렌더링하는 것이 항상 적절하지 않음
   - 리액트의 기본 공식인 `v = f(s)`에서 약간의 탈출구(escape hatches) 가 존재함: useRef, useEffect
   3. 만약 개발자가 의도적으로 오직 props가 변경될때만 리렌더링을 시키고 싶다면 명시적으로 React.memo를 사용하면됨
+
+## Effect 관리
+
+- React는 이론적으로 결국 `v=f(s)`인 순수함수여야함
+  - 즉, 상태가 변화하면 렌더링이되는 기능만 수행해야함
+- 하지만 실제 애플리케이션을 구축하면 당연하게도 사이드이펙트가 발생
+  - 이러한 사이드 이펙트를 관리하는 룰이 존재함
+
+1. Rule #0: 컴포넌트가 렌더링될 때 부작용 없이 렌더링되어야 함
+
+2. Rule #1: 이벤트에 의해 사이드 이펙트가 트리거되는 경우 해당 사이드이펙트를 이벤트 핸들러에 넣어서 처리
+
+- 이벤트 핸들러의 핵심은 이벤트에 대한 로직을 캡슐화하는 것
+- 그렇게 함으로써 React에서는 해당 로직을 React의 렌더링 흐름에서 자연스럽게 분리할 수 있음
+
+- 로컬스토리지에 값을 저장하는 경우
+
+```jsx
+import * as React from "react";
+
+function Greeting({ name }) {
+  const [index, setIndex] = React.useState(0);
+
+  const greetings = ["Hello", "Hola", "Bonjour"];
+
+  const handleClick = () => {
+    const nextIndex = index === greetings.length - 1 ? 0 : index + 1;
+    setIndex(nextIndex);
+
+    localStorage.setItem("index", nextIndex); // 사이드 이펙트를 이벤트 헨들러에서 다루기
+  };
+
+  return (
+    <main>
+      <h1>
+        {greetings[index]}, {name}
+      </h1>
+      <button onClick={handleClick}>Next Greeting</button>
+    </main>
+  );
+}
+
+export default function App() {
+  return <Greeting name="Tyler" />;
+}
+```
+
+- 이렇게 되면서 얻게되는 이점은, 리액트가 렌더링에 사이드 이펙트가 영향을 끼치지 않는다는 점
+
+- 이번에는 로컬스토리지에 저장한 값을 가져오는 경우
+
+```jsx
+import * as React from "react";
+
+function Greeting({ name }) {
+  const [index, setIndex] = React.useState(
+    Number(localStorage.getItem("index"))
+  );
+
+  // ...
+}
+```
+
+- 위의 예시는 합리적으로 보이지만, 룰 #0을 위반함
+  - 왜냐하면 이 앱에서 `localStorage.getItem("index")`이라는 사이드 이펙트를 매 렌더링마다 불러올것이므로,,
+
+```jsx
+import * as React from "react";
+
+function Greeting({ name }) {
+  const [index, setIndex] = React.useState(() => {
+    return Number(localStorage.getItem("index"));
+  });
+
+  // ...
+}
+```
+
+- 이렇게 수정하면 딱 단 한번만 불러오지만, 여전히 룰 #0을 위반함
+  - 한번이든 여러번이든 결국 사이드이펙트를 불러옴,,,
+
+3. Rule #2: 컴포넌트를 외부 시스템과 동기화하는 사이드이펙트가 있는 경우, 해당 사이드이펙트를 useEffect 안에 넣어서 처리
+
+```jsx
+import * as React from "react";
+
+export default function BatteryLevel() {
+  const [level, setLevel] = React.useState(0);
+
+  React.useEffect(() => {
+    console.log("Getting battery level...");
+    // 사이드이펙트
+    navigator.getBattery().then((battery) => {
+      const newLevel = Math.round(battery.level * 100);
+
+      if (newLevel !== level) {
+        setLevel(newLevel);
+      }
+    });
+  });
+
+  console.log("Rendering");
+  return <p>{level}%</p>;
+}
+```
+
+- 위의 콘솔 결과는 아래와 같음
+
+```
+Rendering
+Getting battery level...
+Rendering
+Getting battery level...
+```
+
+- 첫번째 콘솔 묶음은 컴포넌트가 머운트될때 찍히는 로깅 + useEffect에서 비동기적으로 배터리 레벨을 가져오고있는 로깅임
+- 두번째 콘솔 묶음은 기존 level 상태(0)과 현재 level(100 ... 가정)이 다르기때문에 컴포넌트가 재렌더링이 되어서 찍히는 로깅 + 다시 useEffect에서 비동기적으로 배터리 레벨을 가져오는 로깅임
+
+- useEffect에는 의존성 배열이 존재하여, 의존성 배열에 존재하는 값이 변경되면 useEffect가 다시 트리거됨
+  - 단 빈 배열일 경우 마운트될때 딱 한번 실행됨
+
+```jsx
+React.useEffect(() => {
+  console.log("Getting battery level...");
+  // 사이드이펙트
+  navigator.getBattery().then((battery) => {
+    const newLevel = Math.round(battery.level * 100);
+
+    if (newLevel !== level) {
+      setLevel(newLevel);
+    }
+  });
+}, []);
+```
+
+- 이러면 로깅 결과가 아래와 같아짐
+
+```
+Rendering
+Getting battery level...
+Rendering
+```
