@@ -6,6 +6,8 @@
 
 [QueryClient](#react-quert--queryclient)
 
+[Fetching Data](#fetching-data)
+
 ## 왜 React Query를 사용하는지
 
 - 기본적으로 React는 개발자가 `상태` 변화에 대한 처리만 신경 쓰면, 나머지는 React에서 처리해줍니다.
@@ -100,3 +102,62 @@
 - queryKey와 queryFn의 조건
   - queryKey: 고유한 키여야함
   - queryFn: Promise를 반환하는 함수여야함
+
+## Fetching Data
+
+- react-query는 기본적으로 요청을 실행하지 않음 (요청을 실행하는 건 예를들어 fetch, axios등,,)
+  - react-query는 오직 Promise의 상태와 해당 Promise의 데이터에만 관심있음
+  - 따라서 react-query를 이용하여 데이터를 가져오는등의 작업을 수행하려면 fetch, axios등과의 결합이 필요
+
+```js
+const fetchRepos = async () => {
+  try {
+    const response = await fetch("https://api.github.com/orgs/TanStack/repos");
+
+    if (response.ok) {
+      const data = await response.json();
+      return data;
+    } else {
+      throw new Error(`Request failed with status: ${response.status}`);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+```
+
+- 위의 예제가 일반적인 fetch만을 이용해 데이터를 가져오는 방법이라면
+
+```js
+function useRepos() {
+  return useQuery({
+    queryKey: ["repos"],
+    queryFn: async () => {
+      const response = await fetch(
+        "https://api.github.com/orgs/TanStack/repos"
+      );
+
+      if (!response.ok) {
+        throw new Error(`Request failed with status: ${response.status}`);
+      }
+
+      return response.json();
+    },
+  });
+}
+```
+
+```ts
+// ts의 경우
+async function fetchRepos(): Promise<Array<RepoData>>;
+// or
+return response.json() as Array<RepoData>;
+```
+
+- 위의 예제가 react-query의 `useQuery`를 결합하여 데이터를 가져오는 방법
+
+- 둘의 차이점
+  - 기본적으로 try/catch로 감싸지 않아도됨
+    - fetch만 사용했을 때는, 던져진 에러를 catch 블럭에서 잡아서 처리를 해줘야했음
+    - 반면, useQuery의 error or isError를 사용하기 위해서는 단지 error가 있다는 사실만 알려주면됨
+  - await response.json()을 반환하는게 아닌, response.json()을 반환하면됨
