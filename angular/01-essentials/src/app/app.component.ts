@@ -1,6 +1,7 @@
 import { Component } from "@angular/core";
 import { HeaderComponent } from "./header/header.component";
 import { UserComponent } from "./user/user.component";
+import { DUMMY_USERS } from "../data/dummy-users";
 
 /*
   - @Component
@@ -17,4 +18,6 @@ import { UserComponent } from "./user/user.component";
   styleUrl: "./app.component.css", // 로컬 스타일임 - 스타일이 해당 컴포넌트에만 적용됨
   // styleUrls: [] => 예전 angular 버전에는 styleUrl이 존재하지 않음,, 오직 styleUrls를 사용
 })
-export class AppComponent {}
+export class AppComponent {
+  users = DUMMY_USERS;
+}
