@@ -2,6 +2,14 @@
 
 ## 목차
 
+[Angular 커맨드](#angular-커멘드)
+
+[Angular의 변경 감지 및 UI 업데이트 메커니즘](#angular의-변경-감지-및-ui-업데이트-메커니즘)
+
+[Angular 기본 기능 (v2 ~)](#angular-기본-기능-v2-)
+
+[Angular 추가 기능 (v16 ~)](#angalar-추가-기능-v16-)
+
 ## Angular 커멘드
 
 ```shell
@@ -43,8 +51,49 @@ ng g c <path?>/<component-name>
   - 결론적으로,,
     - signal을 사용하면 zone.js가 모든 컴포넌트를 검사하는 상대적으로 비효율적인 방식을 개선할 수 있음
 
+## Angular 기본 기능 (v2 ~)
+
+- html 속성에 데이터를 바인딩하는 방법
+
+  ```html
+  <img [src]="imagePath" [alt]="name" />
+  ```
+
+  - [ html 속성 ]="데이터"
+
+- html 태그에 데이터를 렌더링하는 방법
+
+  ```html
+  <span>{{ name }}</span>
+  ```
+
+  - {{ 데이터 }}
+
+- 상위 컴포넌트로부터 데이터를 받는 방법
+  ```ts
+  @Input({ required: true }) avatar!: string;
+  ```
+  - @Input() 데코레이터 이용
+  - 해당 데코레이터는 객체를 인자로 받음
+    - required: 해당 props이 필수인지 여부
+
+## Angalar 추가 기능 (v16 ~)
+
 - computed()
+
   - signal을 이용해 저장한 상태를 활용한 계산을 수행해야할 때 computed()를 사용
     - computed()는 함수를 인자로 받고, 해당 함수는 계산된 값을 리턴해야함
     - 이렇게되면 계산된 값에 존재하는 상태가 변경될때만 angular가 해당 계산을 다시 수행함
     - 즉, 다른 변화(컴포넌트 재렌더링등,,)에 영향을 받지 않고, 오직 계산에 사용된 signal 상태가 변경될때만 계산을 수행
+
+- set()
+
+  - singal이 상태를 업데이트하는 방법
+
+- 상위 컴포넌트로부터 데이터를 받는 방법
+  ```ts
+  name = input.required<string>();
+  ```
+  - input() 사용
+  - .required: 해당 props이 필수인지 여부
+    - .required 메서드를 이용한 input이라면 초기값 설정 x
