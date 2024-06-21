@@ -6,6 +6,8 @@
 
 [Effect 관리](#effect-관리)
 
+[useRef](#useref)
+
 ## React 렌더링
 
 - React는 기본적으로 사용자 인터페이스를 구축하기 위한 라이브러리임
@@ -303,3 +305,9 @@ Rendering
 Getting battery level...
 Rendering
 ```
+
+## useRef
+
+- useRef는 렌더링 전반에 걸쳐 보존되지만 변경 시 다시 렌더링하지 않는 값을 생성해주는 훅
+  - useRef를 호출하면 반환되는 것은 변경 가능한 현재 프로퍼티가 있는 객체, 즉 렌더링 간에 값이 보존되는 참조
+  - useState와 달리 변경 가능하며(불변성을 지키지 않아도 되며) 값이 변경되어도 재렌더링이 일어나지 않음
