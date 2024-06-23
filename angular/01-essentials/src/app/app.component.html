@@ -2,7 +2,13 @@
 <main>
   <ul id="users">
     <li>
-      <app-user [avatar]="users[0].avatar" [name]="users[0].name" />
+      <app-user
+        [id]="users[0].id"
+        [avatar]="users[0].avatar"
+        [name]="users[0].name"
+        (select)="onSelectUser($event)"
+      />
+      <!-- (select)는 하위 컴포넌트에서 설정한 커스텀 이벤트, 이 예시에서는 id를 담고 있음 .. 살짝 react 상태 끌어올리기와 비슷? -->
     </li>
   </ul>
 </main>
