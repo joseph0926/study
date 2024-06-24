@@ -2,6 +2,7 @@ import { Component } from "@angular/core";
 import { HeaderComponent } from "./header/header.component";
 import { UserComponent } from "./user/user.component";
 import { DUMMY_USERS } from "../data/dummy-users";
+import { TasksComponent } from "./tasks/tasks.component";
 
 /*
   - @Component
@@ -13,15 +14,20 @@ import { DUMMY_USERS } from "../data/dummy-users";
 @Component({
   selector: "app-root", // html에서 어떤 요소를 찾아서 대체해야할지 알려줌
   standalone: true,
-  imports: [HeaderComponent, UserComponent], // 해당 컴포넌트 마크업(html)에 사용되는 다른 컴포넌트를 임포트함
+  imports: [HeaderComponent, UserComponent, TasksComponent], // 해당 컴포넌트 마크업(html)에 사용되는 다른 컴포넌트를 임포트함
   templateUrl: "./app.component.html", // html 요소를 대체하는 마크업
   styleUrl: "./app.component.css", // 로컬 스타일임 - 스타일이 해당 컴포넌트에만 적용됨
   // styleUrls: [] => 예전 angular 버전에는 styleUrl이 존재하지 않음,, 오직 styleUrls를 사용
 })
 export class AppComponent {
   users = DUMMY_USERS;
+  selectedUserId = "u1";
+
+  get selectedUser() {
+    return this.users.find((user) => user.id === this.selectedUserId)!;
+  }
 
   onSelectUser(id: string) {
-    console.log(id);
+    this.selectedUserId = id;
   }
 }
