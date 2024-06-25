@@ -6,6 +6,8 @@
 
 [Selectors](#selectors)
 
+[Box Model](#box-model)
+
 ## Media Queries
 
 ```css
@@ -87,3 +89,35 @@ button:hover {
 
   <input placeholder="asdf" />
   ```
+
+## Box Model
+
+- 왜 대부분 글로벌 css 초기값으로 `box-sizing: border-box;`를 지정해줄까
+  - 브라우저의 기본값: `box-sizing: content-box`
+  - boder-box vs content-box
+    - border-box: content + padding + border까지가 width, height에 반영됨
+      - ex)
+        ```css
+        .box {
+          box-sizing: border-box;
+          width: 200px;
+          height: 200px;
+          padding: 4px;
+          border: 1px solid black;
+        }
+        ```
+        - 실제 차지하는 공간: 각각 200px씩,,
+        - 실제 컨텐츠 크기: 200px - (4px _ 2) - (1px _ 2) = 190px
+    - cotent-box: content까지가 width, height에 반영됨
+      - ex)
+        ```css
+        .box {
+          box-sizing: content-box;
+          width: 200px;
+          height: 200px;
+          padding: 4px;
+          border: 1px solid black;
+        }
+        ```
+        - 실제 차지하는 공간: 200px + (4px _ 2) + (1px _ 2) = 210px
+        - 실제 컨텐츠 크기: 200px
