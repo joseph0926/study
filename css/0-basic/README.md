@@ -74,3 +74,16 @@ button:hover {
   ```
 
 - Pseudo elements (의사 요소)
+
+  - 의사 요소는 의사 클래스와 달리 적용한 대상의 **하위요소**를 대상으로 스타일을 적용함
+  - 또한 의사 요소는 일반적으로 `:`대신 `::`을 사용하지만, `:`를 사용하는 일부 의사요소도 존재
+
+  ```html
+  <style>
+    input::placeholder {
+      color: red;
+    }
+  </style>
+
+  <input placeholder="asdf" />
+  ```
