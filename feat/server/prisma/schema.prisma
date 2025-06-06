@@ -1,9 +1,107 @@
-generator client {
-  provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
-}
-
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Category {
+  DIGITAL
+  FURNITURE
+  BABY
+  FASHION
+  BOOK
+  ETC
+}
+
+enum TradeStatus {
+  ON_SALE
+  RESERVED
+  SOLD_OUT
+}
+
+model User {
+  id             String        @id @default(uuid())
+  email          String        @unique
+  nickname       String
+  neighborhood   Neighborhood? @relation(fields: [neighborhoodId], references: [id])
+  neighborhoodId String?
+  posts          Post[]
+  postLikes      PostLike[]
+  comments       Comment[]
+  createdAt      DateTime      @default(now())
+  CommentLike    CommentLike[]
+}
+
+model Neighborhood {
+  id    String @id @default(uuid())
+  name  String
+  lat   Float
+  lng   Float
+  users User[]
+  posts Post[]
+}
+
+model Post {
+  id             String       @id @default(uuid())
+  title          String
+  content        String
+  price          Int?
+  category       Category
+  status         TradeStatus  @default(ON_SALE)
+  author         User         @relation(fields: [authorId], references: [id])
+  authorId       String
+  neighborhood   Neighborhood @relation(fields: [neighborhoodId], references: [id])
+  neighborhoodId String
+  images         PostImage[]
+  likes          PostLike[]
+  comments       Comment[]
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  @@index([createdAt, id(sort: Desc)])
+}
+
+model PostImage {
+  id     String @id @default(uuid())
+  url    String
+  post   Post   @relation(fields: [postId], references: [id])
+  postId String
+  order  Int
+}
+
+model PostLike {
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  post      Post     @relation(fields: [postId], references: [id])
+  postId    String
+  createdAt DateTime @default(now())
+
+  @@id([userId, postId])
+  @@index([postId])
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  content   String
+  author    User     @relation(fields: [authorId], references: [id])
+  authorId  String
+  post      Post     @relation(fields: [postId], references: [id])
+  postId    String
+  createdAt DateTime @default(now())
+
+  commentLikes CommentLike[]
+}
+
+model CommentLike {
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  comment   Comment  @relation(fields: [commentId], references: [id])
+  commentId String
+  createdAt DateTime @default(now())
+
+  @@id([userId, commentId])
+  @@index([commentId])
 }

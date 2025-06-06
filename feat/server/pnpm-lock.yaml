@@ -14,6 +14,9 @@ importers:
       fastify:
         specifier: ^5.3.3
         version: 5.3.3
+      zod:
+        specifier: ^3.25.52
+        version: 3.25.52
     devDependencies:
       '@types/node':
         specifier: ^22.15.30
@@ -467,6 +470,9 @@ packages:
   wrappy@1.0.2:
     resolution: {integrity: sha512-l4Sp/DRseor9wL6EvV2+TuQn63dMkPjZ/sp9XkghTEbV9KlPS1xUsZ3u7/IQO4wxtcFB4bgpQPRcR3QCvezPcQ==}
 
+  zod@3.25.52:
+    resolution: {integrity: sha512-uAbT2zN2aCdHH4OmFrV/GhZy1rsnIgIOaQ+YDLUAzMe4560rscckxxg4Myk+KHarIAUhya2clp4EnCqXWF0eew==}
+
 snapshots:
 
   '@esbuild/aix-ppc64@0.25.5':
@@ -855,3 +861,5 @@ snapshots:
   undici-types@6.21.0: {}
 
   wrappy@1.0.2: {}
+
+  zod@3.25.52: {}
