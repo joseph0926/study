@@ -1,7 +1,7 @@
 import { prisma } from "@/shared/db/prisma";
 
 type PostListRepositoryParams = {
-  limit: number;
+  limit: string;
   after?: string | null;
   before?: string | null;
 };
@@ -15,7 +15,7 @@ export const PostListRepository = async ({
     : undefined;
 
   const posts = await prisma.post.findMany({
-    take: limit + 1,
+    take: parseInt(limit, 10) + 1,
     orderBy: [{ createdAt: "desc" }, { id: "desc" }],
     include: {
       author: true,

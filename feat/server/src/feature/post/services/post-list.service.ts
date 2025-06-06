@@ -8,7 +8,7 @@ export const getPostListService = async (
 ): Promise<PostListResponseSchemaType> => {
   const parsed = PaginationSchema.pick({ nextCursor: true })
     .extend({
-      limit: z.number().int().positive().default(10),
+      limit: z.string(),
     })
     .safeParse(query);
   if (!parsed.success) throw parsed.error;
@@ -17,8 +17,10 @@ export const getPostListService = async (
 
   const rawPostListData = await PostListRepository({ limit, after });
 
-  const hasNext = rawPostListData.length > limit;
-  const items = hasNext ? rawPostListData.slice(0, limit) : rawPostListData;
+  const hasNext = rawPostListData.length > parseInt(limit, 10);
+  const items = hasNext
+    ? rawPostListData.slice(0, parseInt(limit, 10))
+    : rawPostListData;
   const nextCursor = hasNext
     ? Buffer.from(
         JSON.stringify({
