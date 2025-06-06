@@ -23,61 +23,86 @@ enum TradeStatus {
 }
 
 model User {
-  id             String        @id @default(uuid())
-  email          String        @unique
-  nickname       String
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+
+  email           String    @unique
+  nickname        String
+  emailVerifiedAt DateTime?
+  isEmailVerified Boolean   @default(false)
+
   neighborhood   Neighborhood? @relation(fields: [neighborhoodId], references: [id])
   neighborhoodId String?
-  posts          Post[]
-  postLikes      PostLike[]
-  comments       Comment[]
-  createdAt      DateTime      @default(now())
-  CommentLike    CommentLike[]
+
+  posts        Post[]
+  postLikes    PostLike[]
+  comments     Comment[]
+  commentLikes CommentLike[]
+}
+
+model EmailOTP {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+
+  email    String
+  code     String
+  expires  DateTime
+  consumed Boolean  @default(false)
+
+  @@index([email, code])
 }
 
 model Neighborhood {
-  id    String @id @default(uuid())
-  name  String
-  lat   Float
-  lng   Float
+  id String @id @default(uuid())
+
+  name String
+  lat  Float
+  lng  Float
+
   users User[]
   posts Post[]
 }
 
 model Post {
-  id             String       @id @default(uuid())
-  title          String
-  content        String
-  price          Int?
-  category       Category
-  status         TradeStatus  @default(ON_SALE)
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  title    String
+  content  String
+  price    Int?
+  category Category
+  status   TradeStatus @default(ON_SALE)
+
   author         User         @relation(fields: [authorId], references: [id])
   authorId       String
   neighborhood   Neighborhood @relation(fields: [neighborhoodId], references: [id])
   neighborhoodId String
-  images         PostImage[]
-  likes          PostLike[]
-  comments       Comment[]
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
+
+  images   PostImage[]
+  likes    PostLike[]
+  comments Comment[]
 
   @@index([createdAt, id(sort: Desc)])
 }
 
 model PostImage {
-  id     String @id @default(uuid())
-  url    String
+  id String @id @default(uuid())
+
+  url   String
+  order Int
+
   post   Post   @relation(fields: [postId], references: [id])
   postId String
-  order  Int
 }
 
 model PostLike {
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String
-  post      Post     @relation(fields: [postId], references: [id])
-  postId    String
   createdAt DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+  post   Post   @relation(fields: [postId], references: [id])
+  postId String
 
   @@id([userId, postId])
   @@index([postId])
@@ -85,22 +110,25 @@ model PostLike {
 
 model Comment {
   id        String   @id @default(uuid())
-  content   String
-  author    User     @relation(fields: [authorId], references: [id])
-  authorId  String
-  post      Post     @relation(fields: [postId], references: [id])
-  postId    String
   createdAt DateTime @default(now())
+
+  content String
+
+  author   User   @relation(fields: [authorId], references: [id])
+  authorId String
+  post     Post   @relation(fields: [postId], references: [id])
+  postId   String
 
   commentLikes CommentLike[]
 }
 
 model CommentLike {
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String
-  comment   Comment  @relation(fields: [commentId], references: [id])
-  commentId String
   createdAt DateTime @default(now())
+
+  user      User    @relation(fields: [userId], references: [id])
+  userId    String
+  comment   Comment @relation(fields: [commentId], references: [id])
+  commentId String
 
   @@id([userId, commentId])
   @@index([commentId])
