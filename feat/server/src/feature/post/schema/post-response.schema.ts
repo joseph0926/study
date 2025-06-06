@@ -13,8 +13,10 @@ export const PostResponseSchema = PostBaseSchema.extend({
   }),
   comments: z.array(CommentBaseSchema).optional(),
 });
+export type PostResponseSchemaType = z.infer<typeof PostResponseSchema>;
 
 export const PostListResponseSchema = z.object({
   items: z.array(PostResponseSchema).default([]),
   pageInfo: PaginationSchema,
 });
+export type PostListResponseSchemaType = z.infer<typeof PostListResponseSchema>;

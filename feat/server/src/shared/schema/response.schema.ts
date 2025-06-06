@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { ErrorResponseSchema } from "./error.schema";
 
 const ApiResponseBaseSchema = z.object({
   message: z.string(),
@@ -7,10 +8,7 @@ const ApiResponseBaseSchema = z.object({
 
 export const ApiResponseFailSchema = ApiResponseBaseSchema.extend({
   success: z.literal(false),
-  error: z.object({
-    code: z.string(),
-    detail: z.any().optional(),
-  }),
+  error: ErrorResponseSchema,
 });
 
 export const makeApiResponseSuccessSchema = <T extends z.ZodTypeAny>(

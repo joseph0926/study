@@ -10,5 +10,5 @@ export const UserBaseSchema = z.object({
 
   createdAt: z.date().optional(),
 
-  neighborhoodId: z.string().uuid(),
+  neighborhoodId: z.string().uuid().nullable(),
 });
