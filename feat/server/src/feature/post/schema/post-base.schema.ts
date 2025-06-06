@@ -13,7 +13,7 @@ export const PostBaseSchema = z.object({
   content: z
     .string()
     .min(1, { message: "content는 최소 1자 이상이어야합니다." }),
-  price: z.number().int().positive().nullable(),
+  price: z.number().int().nonnegative().nullable(),
   category: CategoryEnumSchema,
   status: TradeStatusEnumSchema.optional(),
 

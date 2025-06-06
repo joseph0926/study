@@ -20,3 +20,10 @@ export const makeApiResponseSuccessSchema = <T extends z.ZodTypeAny>(
     success: z.literal(true),
     data: dataSchema,
   });
+
+export const PaginationSchema = z.object({
+  nextCursor: z.string().nullable(),
+  prevCursor: z.string().nullable(),
+  hasNext: z.boolean(),
+  hasPrev: z.boolean(),
+});

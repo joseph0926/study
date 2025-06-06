@@ -1,6 +1,6 @@
-import { UserBaseSchmea } from "./user-base.schema";
+import { UserBaseSchema } from "./user-base.schema";
 
-export const UserCreateSchema = UserBaseSchmea.omit({
+export const UserCreateSchema = UserBaseSchema.omit({
   id: true,
   createdAt: true,
   neighborhoodId: true,

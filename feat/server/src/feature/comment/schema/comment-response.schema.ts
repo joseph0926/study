@@ -1,9 +1,9 @@
 import { z } from "zod";
 import { CommentBaseSchema } from "./comment-base.schema";
-import { UserBaseSchmea } from "@/feature/user/schema/user-base.schema";
+import { UserBaseSchema } from "@/feature/user/schema/user-base.schema";
 
 export const CommentResponseSchema = CommentBaseSchema.extend({
-  author: UserBaseSchmea,
+  author: UserBaseSchema,
   _count: z.object({
     commentLikes: z.number().int().nonnegative().default(0),
   }),

@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { UserBaseSchmea } from "./user-base.schema";
+import { UserBaseSchema } from "./user-base.schema";
 
-export const UserUpdateSchema = UserBaseSchmea.partial().extend({
+export const UserUpdateSchema = UserBaseSchema.partial().extend({
   id: z.string().uuid(),
 });
