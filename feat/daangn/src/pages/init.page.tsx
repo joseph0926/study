@@ -3,12 +3,28 @@ import { InitHeader } from '@/feature/init/components/init-header';
 import { TypeCard } from '@/feature/init/components/type-card';
 import { MEMBER_TYPE } from '@/feature/init/constants/member';
 import { useInitStore } from '@/feature/init/init.store';
+import { useNavigate } from 'react-router';
+import { toast } from 'sonner';
 import { useShallow } from 'zustand/shallow';
 
 export const InitPage = () => {
-  const { memberType } = useInitStore(
-    useShallow((state) => ({ memberType: state.memberType })),
+  const router = useNavigate();
+
+  const { memberType, setStep } = useInitStore(
+    useShallow((state) => ({
+      memberType: state.memberType,
+      setStep: state.setStep,
+    })),
   );
+
+  const handleNext = () => {
+    if (!memberType) {
+      toast.error('회원 유형을 선택해주세요.');
+      return;
+    }
+    setStep(2);
+    router('/init/location');
+  };
 
   return (
     <section className="flex size-full flex-col justify-between gap-4 overflow-hidden py-10">
@@ -32,7 +48,11 @@ export const InitPage = () => {
           />
         ))}
       </div>
-      <Button disabled={!memberType} className="w-full cursor-pointer">
+      <Button
+        disabled={!memberType}
+        onClick={handleNext}
+        className="w-full cursor-pointer"
+      >
         다음
       </Button>
     </section>

@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import type { MemberType } from './init.type';
+import { createJSONStorage, persist } from 'zustand/middleware';
 
 type InitStoreType = {
   step: number;
@@ -8,9 +9,17 @@ type InitStoreType = {
   setMemberType: (memberType: MemberType) => void;
 };
 
-export const useInitStore = create<InitStoreType>((set) => ({
-  step: 1,
-  setStep: (step) => set({ step }),
-  memberType: null,
-  setMemberType: (memberType) => set({ memberType }),
-}));
+export const useInitStore = create<InitStoreType>()(
+  persist(
+    (set) => ({
+      step: 1,
+      setStep: (step) => set({ step }),
+      memberType: null,
+      setMemberType: (memberType) => set({ memberType }),
+    }),
+    {
+      name: 'daangn-init',
+      storage: createJSONStorage(() => window.sessionStorage),
+    },
+  ),
+);
