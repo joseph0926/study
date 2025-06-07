@@ -1,13 +1,13 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export const UserBaseSchema = z.object({
   id: z.string().uuid(),
   email: z.string().email(),
   nickname: z
     .string()
-    .min(1, { message: "nickname은 최소 1자 이상이어야합니다." }),
+    .min(1, { message: 'nickname은 최소 1자 이상이어야합니다.' }),
 
-  createdAt: z.date().optional(),
+  createdAt: z.string().optional(),
 
   neighborhoodId: z.string().uuid().nullable(),
 });

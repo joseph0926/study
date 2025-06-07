@@ -23,8 +23,8 @@ export const PostBaseSchema = z.object({
   category: CategoryEnumSchema,
   status: TradeStatusEnumSchema.optional(),
 
-  createdAt: z.date().optional(),
-  updatedAt: z.date().optional(),
+  createdAt: z.string().optional(),
+  updatedAt: z.string().optional(),
 
   authorId: z.string().uuid(),
   neighborhoodId: z.string().uuid(),

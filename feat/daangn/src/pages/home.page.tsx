@@ -1,3 +1,9 @@
+import { PostList } from '@/feature/post/components/post-list';
+
 export const HomePage = () => {
-  return <div>HomePage</div>;
+  return (
+    <div className="p-4">
+      <PostList />
+    </div>
+  );
 };

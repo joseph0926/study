@@ -25,3 +25,4 @@ export const PaginationSchema = z.object({
   hasNext: z.boolean(),
   hasPrev: z.boolean(),
 });
+export type PaginationSchemaType = z.infer<typeof PaginationSchema>;
