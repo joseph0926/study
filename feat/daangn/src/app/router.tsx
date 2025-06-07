@@ -1,4 +1,5 @@
 import { HomePage } from '@/pages/home.page';
+import { InitPage } from '@/pages/init.page';
 import { RootLayout } from '@/pages/layout/root.layout';
 import { createBrowserRouter, type RouteObject } from 'react-router';
 
@@ -10,6 +11,10 @@ const unAuthenticatedRouter: RouteObject[] = [
       {
         index: true,
         element: <HomePage />,
+      },
+      {
+        path: 'init',
+        element: <InitPage />,
       },
       {
         path: 'post/:postId',
