@@ -6,6 +6,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import type { PostResponseSchemaType } from '../schema/post-response.schema';
+import { Link } from 'react-router';
 
 type PostCardProps = {
   post: PostResponseSchemaType;
@@ -13,16 +14,18 @@ type PostCardProps = {
 
 export const PostCard = ({ post }: PostCardProps) => {
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{post.title}</CardTitle>
-        <CardDescription>
-          {new Date(post.createdAt ?? '').toLocaleDateString()}
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <p>{post.content}</p>
-      </CardContent>
-    </Card>
+    <Link to={`/post/${post.id}`} className="my-4 block">
+      <Card>
+        <CardHeader>
+          <CardTitle>{post.title}</CardTitle>
+          <CardDescription>
+            {new Date(post.createdAt ?? '').toLocaleDateString()}
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <p>{post.content}</p>
+        </CardContent>
+      </Card>
+    </Link>
   );
 };

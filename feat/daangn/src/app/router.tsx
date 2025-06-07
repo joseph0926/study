@@ -11,6 +11,13 @@ const unAuthenticatedRouter: RouteObject[] = [
         index: true,
         element: <HomePage />,
       },
+      {
+        path: 'post/:postId',
+        lazy: async () => {
+          const { PostPage: Component } = await import('@/pages/post.page');
+          return { Component };
+        },
+      },
     ],
   },
 ];
