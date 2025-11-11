@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>실험 0.5: 다운로드 vs 실행 타이밍</title>
+</head>
+<body>
+    <h1>실험 0.5: 언제 다운로드하고, 언제 실행하는가?</h1>
+
+    <script>
+        console.log('1. 시작');
+    </script>
+
+    <script src="experiment-0.5-normal.js"></script>
+    <script src="experiment-0.5-async.js" async></script>
+    <script src="experiment-0.5-defer.js" defer></script>
+
+    <script>
+        console.log('2. 끝');
+    </script>
+
+    <h2>Network 탭에서 확인할 것:</h2>
+    <ol>
+        <li>세 파일의 <strong>다운로드 시작 시간</strong>이 같은가 다른가?</li>
+        <li>세 파일의 <strong>다운로드 완료 시간</strong>은?</li>
+        <li>다운로드 완료와 실행(콘솔 로그) 사이의 시간 차이는?</li>
+    </ol>
+
+    <h2>예측:</h2>
+    <p>당신의 가설을 세워보세요:</p>
+    <ul>
+        <li>async는 "다운로드를 비동기로" 하는가? "실행을 비동기로" 하는가? 둘 다?</li>
+        <li>defer는 "다운로드를 지연"하는가? "실행을 지연"하는가?</li>
+    </ul>
+
+    <h2>힌트:</h2>
+    <p>Network 탭의 Waterfall을 자세히 보면:</p>
+    <ul>
+        <li>요청이 <strong>언제 시작</strong>되는지</li>
+        <li>다운로드가 <strong>언제 완료</strong>되는지</li>
+        <li>Console 로그와 비교하면 <strong>실행 시점</strong>을 추론할 수 있음</li>
+    </ul>
+</body>
+</html>

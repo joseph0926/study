@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>실험 0.1: 코드 전달 관찰</title>
+</head>
+<body>
+    <h1>실험 0.1: JavaScript가 브라우저에 도달하는 과정</h1>
+
+    <h2>케이스 1: 인라인 스크립트</h2>
+    <script>
+        console.log('[인라인] 이 코드는 HTML 파일 안에 직접 작성되었습니다');
+    </script>
+
+    <h2>케이스 2: 외부 스크립트</h2>
+    <script src="experiment-0.1.js"></script>
+
+    <hr>
+    <h3>관찰 포인트 (개발자 도구 Console + Network 탭 열어보기)</h3>
+    <ul>
+        <li>Network 탭: experiment-0.1.js 파일이 별도로 요청되는가?</li>
+        <li>인라인 스크립트는 Network 탭에 나타나는가?</li>
+        <li>두 스크립트의 실행 순서는?</li>
+        <li>파일 크기, 전송 시간은?</li>
+    </ul>
+</body>
+</html>

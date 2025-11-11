@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>실험 0.2: HTML이 정말 위에서 아래로 읽히는가?</title>
+</head>
+<body>
+    <h1>실험 0.2: 실행 순서 검증</h1>
+
+    <script>
+        console.log('1. 첫 번째 스크립트');
+    </script>
+
+    <p>이것은 HTML 요소입니다</p>
+
+    <script>
+        console.log('2. 두 번째 스크립트');
+    </script>
+
+    <script src="experiment-0.2-a.js"></script>
+
+    <div>또 다른 HTML 요소</div>
+
+    <script src="experiment-0.2-b.js"></script>
+
+    <script>
+        console.log('3. 세 번째 스크립트');
+    </script>
+
+    <h2>질문:</h2>
+    <ul>
+        <li>정말 1 → 2 → a.js → b.js → 3 순서로 실행되는가?</li>
+        <li>"위에서 아래"라는 규칙이 <strong>항상</strong> 성립하는가?</li>
+        <li>어떤 조건에서 이 순서가 깨질 수 있을까?</li>
+    </ul>
+</body>
+</html>

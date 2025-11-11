@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>실험 0.3: async와 defer는 순서를 바꾸는가?</title>
+</head>
+<body>
+    <h1>실험 0.3: 실행 순서의 예외</h1>
+
+    <script>
+        console.log('1. 일반 인라인 스크립트');
+    </script>
+
+    <script src="experiment-0.3-normal.js"></script>
+
+    <script src="experiment-0.3-async.js" async></script>
+
+    <script src="experiment-0.3-defer.js" defer></script>
+
+    <script>
+        console.log('2. 마지막 인라인 스크립트');
+    </script>
+
+    <h2>예측 질문:</h2>
+    <ul>
+        <li>실행 순서는 어떻게 될까?</li>
+        <li>1 → normal → async → defer → 2 순서일까?</li>
+        <li>async와 defer는 <strong>무엇을</strong> 변경하는가?</li>
+        <li>Network 탭의 타이밍은 어떻게 다를까?</li>
+    </ul>
+</body>
+</html>

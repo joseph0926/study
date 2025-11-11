@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>실험 0.4: async/defer의 "마지막"이 정확히 언제인가?</title>
+  </head>
+  <body>
+    <h1>실험 0.4: 실행 시점의 경계 찾기</h1>
+
+    <script>
+      console.log("1. HEAD 끝의 인라인 스크립트");
+    </script>
+
+    <div>첫 번째 HTML 요소</div>
+
+    <script src="experiment-0.4-normal.js"></script>
+
+    <div>두 번째 HTML 요소</div>
+
+    <script src="experiment-0.4-defer.js" defer></script>
+
+    <script src="experiment-0.4-async.js" async></script>
+
+    <div>세 번째 HTML 요소</div>
+
+    <script>
+      console.log("2. BODY 중간의 인라인 스크립트");
+    </script>
+
+    <div>네 번째 HTML 요소</div>
+
+    <script>
+      console.log("3. BODY 끝의 인라인 스크립트");
+    </script>
+
+    <h2>질문:</h2>
+    <ul>
+      <li>async와 defer는 "2"와 "3" 사이에 실행되는가?</li>
+      <li>아니면 "3" 이후에 실행되는가?</li>
+      <li>async와 defer의 순서는 항상 같은가?</li>
+    </ul>
+
+    <h2>추가 관찰:</h2>
+    <p>
+      이 문단이 화면에 보이는 <strong>시점</strong>과 스크립트 실행 시점의
+      관계는?
+    </p>
+
+    <script>
+      console.log("4. HTML 파싱 완전히 끝난 후 (</body> 직전)");
+    </script>
+  </body>
+</html>

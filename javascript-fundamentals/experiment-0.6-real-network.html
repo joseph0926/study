@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>실험 0.6: 실제 네트워크 환경</title>
+</head>
+<body>
+    <h1>실험 0.6: 진짜 async/defer 차이 보기</h1>
+
+    <script>
+        console.log('[HTML] 파싱 시작');
+        console.time('HTML 파싱 시간');
+    </script>
+
+    <h2>일반 스크립트 (blocking)</h2>
+    <script src="slow-normal.js"></script>
+    <script>
+        console.log('[HTML] 일반 스크립트 로드 후');
+    </script>
+
+    <h2>async 스크립트</h2>
+    <script src="slow-async.js" async></script>
+    <script>
+        console.log('[HTML] async 태그 만난 직후 (바로 지나감)');
+    </script>
+
+    <h2>defer 스크립트</h2>
+    <script src="slow-defer.js" defer></script>
+    <script>
+        console.log('[HTML] defer 태그 만난 직후 (바로 지나감)');
+    </script>
+
+    <script>
+        console.log('[HTML] 파싱 끝');
+        console.timeEnd('HTML 파싱 시간');
+    </script>
+
+    <hr>
+    <h2>관찰 포인트:</h2>
+    <ol>
+        <li><strong>HTML 파싱 시간</strong>: 얼마나 걸리는가?</li>
+        <li><strong>일반 스크립트</strong>: 파싱을 1초 동안 블로킹하는가?</li>
+        <li><strong>async</strong>: "태그 만난 직후" 로그가 즉시 나오는가?</li>
+        <li><strong>defer</strong>: "태그 만난 직후" 로그가 즉시 나오는가?</li>
+        <li><strong>Network 탭</strong>: 다운로드 시작 시점이 다른가?</li>
+    </ol>
+
+    <h2>예측:</h2>
+    <ul>
+        <li>HTML 파싱 시간이 1초 이상? 이하?</li>
+        <li>일반 스크립트는 언제 다운로드 시작?</li>
+        <li>async는 언제 다운로드 시작? 언제 실행?</li>
+        <li>defer는 언제 다운로드 시작? 언제 실행?</li>
+    </ul>
+</body>
+</html>
