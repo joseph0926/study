@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>실험 1.2: Call Stack의 한계</title>
+  <style>
+    body {
+      font-family: 'Courier New', monospace;
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 20px;
+      background-color: #1e1e1e;
+      color: #d4d4d4;
+    }
+    h1 {
+      color: #4ec9b0;
+    }
+    .info {
+      background-color: #2d2d30;
+      padding: 20px;
+      border-radius: 5px;
+      border-left: 4px solid #007acc;
+      margin: 20px 0;
+    }
+    .code-block {
+      background-color: #1e1e1e;
+      padding: 15px;
+      border-radius: 5px;
+      border: 1px solid #3e3e42;
+      margin: 10px 0;
+      font-size: 14px;
+    }
+    .prediction {
+      background-color: #3a2d1a;
+      padding: 15px;
+      border-radius: 5px;
+      border-left: 4px solid #ce9178;
+      margin: 20px 0;
+    }
+    .result {
+      background-color: #1a2d1a;
+      padding: 15px;
+      border-radius: 5px;
+      border-left: 4px solid #4ec9b0;
+      margin: 20px 0;
+    }
+    .warning {
+      background-color: #3a2a1a;
+      padding: 15px;
+      border-radius: 5px;
+      border-left: 4px solid #d7ba7d;
+      margin: 20px 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>🧪 실험 1.2: Call Stack의 한계</h1>
+
+  <div class="info">
+    <h2>📋 실험 목적</h2>
+    <p>Call Stack에 함수가 무한히 쌓일 수 있는가?</p>
+  </div>
+
+  <div class="prediction">
+    <h2>🤔 당신의 예측</h2>
+    <p><strong>에러 발생 여부:</strong> 에러가 발생하지 않을 것 같음</p>
+    <p><strong>예측 근거:</strong> 무한 리렌더링/패치 경험상 에러 없이 브라우저가 멈추거나 죽음</p>
+    <p><strong>대안 가설:</strong> 에러가 발생하지만 try/catch나 로그가 없어서 보지 못했을 가능성</p>
+  </div>
+
+  <div class="warning">
+    <h2>⚠️ 주의사항</h2>
+    <p>이 실험은 브라우저를 멈추게 할 수 있습니다.</p>
+    <p>개발자 도구 콘솔을 먼저 열어주세요! (F12 또는 Cmd+Opt+I)</p>
+  </div>
+
+  <div class="result">
+    <h2>✅ 실제 결과</h2>
+    <p><strong>콘솔을 확인하세요!</strong></p>
+    <p>에러가 발생했는지, catch 블록이 실행되었는지 확인하세요.</p>
+  </div>
+
+  <div class="info">
+    <h2>📝 실험 코드</h2>
+    <div class="code-block">
+let count = 0;<br>
+<br>
+function recursion() {<br>
+&nbsp;&nbsp;count++;<br>
+&nbsp;&nbsp;recursion();<br>
+}<br>
+<br>
+try {<br>
+&nbsp;&nbsp;recursion();<br>
+} catch (e) {<br>
+&nbsp;&nbsp;console.log(`${count}번째 호출에서 에러 발생`);<br>
+&nbsp;&nbsp;console.log('에러 타입:', e.name);<br>
+&nbsp;&nbsp;console.log('에러 메시지:', e.message);<br>
+}
+    </div>
+  </div>
+
+  <script>
+    console.log("=== 실험 1.2 시작 ===\n");
+
+    let count = 0;
+
+    function recursion() {
+      count++;
+      recursion();
+    }
+
+    try {
+      recursion();
+    } catch (e) {
+      console.log(`\n${count}번째 호출에서 에러 발생`);
+      console.log('에러 타입:', e.name);
+      console.log('에러 메시지:', e.message);
+      console.log('\n=== 실험 1.2 종료 ===');
+    }
+  </script>
+</body>
+</html>

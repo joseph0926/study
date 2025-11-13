@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>실험 1.1: Call Stack 기초</title>
+  <style>
+    body {
+      font-family: 'Courier New', monospace;
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 20px;
+      background-color: #1e1e1e;
+      color: #d4d4d4;
+    }
+    h1 {
+      color: #4ec9b0;
+    }
+    .info {
+      background-color: #2d2d30;
+      padding: 20px;
+      border-radius: 5px;
+      border-left: 4px solid #007acc;
+      margin: 20px 0;
+    }
+    .code-block {
+      background-color: #1e1e1e;
+      padding: 15px;
+      border-radius: 5px;
+      border: 1px solid #3e3e42;
+      margin: 10px 0;
+      font-size: 14px;
+    }
+    .prediction {
+      background-color: #3a2d1a;
+      padding: 15px;
+      border-radius: 5px;
+      border-left: 4px solid #ce9178;
+      margin: 20px 0;
+    }
+    .result {
+      background-color: #1a2d1a;
+      padding: 15px;
+      border-radius: 5px;
+      border-left: 4px solid #4ec9b0;
+      margin: 20px 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>🧪 실험 1.1: 함수 호출의 물리적 실체</h1>
+
+  <div class="info">
+    <h2>📋 실험 목적</h2>
+    <p>함수가 중첩되어 호출될 때, 실행 순서는 어떻게 결정되는가?</p>
+  </div>
+
+  <div class="prediction">
+    <h2>🤔 당신의 예측</h2>
+    <p><strong>출력 순서:</strong></p>
+    <div class="code-block">
+      1번 시작 → 2번 시작 → 3번 → 2번 끝 → 1번 끝
+    </div>
+    <p><strong>대안 가설:</strong></p>
+    <div class="code-block">
+      1번 시작 → 1번 끝 → 2번 시작 → 2번 끝 → 3번
+    </div>
+  </div>
+
+  <div class="result">
+    <h2>✅ 실제 결과</h2>
+    <p><strong>아래 개발자 도구 콘솔을 확인하세요 (F12 또는 Cmd+Opt+I)</strong></p>
+    <p>콘솔에 출력된 순서를 정확히 기록하세요!</p>
+  </div>
+
+  <div class="info">
+    <h2>📝 실험 코드</h2>
+    <div class="code-block">
+function third() {<br>
+&nbsp;&nbsp;console.log("3번");<br>
+}<br>
+<br>
+function second() {<br>
+&nbsp;&nbsp;console.log("2번 시작");<br>
+&nbsp;&nbsp;third();<br>
+&nbsp;&nbsp;console.log("2번 끝");<br>
+}<br>
+<br>
+function first() {<br>
+&nbsp;&nbsp;console.log("1번 시작");<br>
+&nbsp;&nbsp;second();<br>
+&nbsp;&nbsp;console.log("1번 끝");<br>
+}<br>
+<br>
+first();
+    </div>
+  </div>
+
+  <script>
+    console.log("=== 실험 1.1 시작 ===\n");
+
+    function third() {
+      console.log("3번");
+    }
+
+    function second() {
+      console.log("2번 시작");
+      third();
+      console.log("2번 끝");
+    }
+
+    function first() {
+      console.log("1번 시작");
+      second();
+      console.log("1번 끝");
+    }
+
+    first();
+
+    console.log("\n=== 실험 1.1 종료 ===");
+  </script>
+</body>
+</html>

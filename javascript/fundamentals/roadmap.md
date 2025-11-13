@@ -15,9 +15,44 @@
 
 ---
 
+### 레벨 1-A Phase 1: Call Stack (완료)
+
+**완료한 실험:**
+- ✅ 실험 1.1: 함수 호출의 물리적 실체
+- ✅ 실험 1.2: Call Stack의 한계 (Stack Overflow)
+- ✅ 실험 1.3: try/catch 없이 Stack Overflow
+
+**핵심 학습:**
+1. **Call Stack 기본 동작**
+   - 함수 실행 → Call Stack에 쌓임
+   - 함수 return → Call Stack에서 제거
+   - LIFO (Last In First Out) 구조
+   - 싱글쓰레드 → 한 번에 하나의 함수만 실행
+
+2. **Call Stack 한계**
+   - 최대 크기: 약 10,364개 (Chrome 기준)
+   - 한계 초과 시 → RangeError: Maximum call stack size exceeded
+   - 무한 재귀는 Stack Overflow 발생
+
+3. **에러 처리**
+   - try/catch 있음 → 에러 잡아서 프로그램 계속 실행
+   - try/catch 없음 → Uncaught Error, 스크립트 중단
+   - 스크립트 중단 ≠ 브라우저 크래시
+
+4. **무한 재귀 vs 무한 리렌더링 차이**
+   - 무한 재귀: Call Stack에 쌓임 → 10,364번에 RangeError → 즉시 중단
+   - 무한 리렌더링: Call Stack 매번 비워짐 → 에러 없음 → 메모리 소진 → 브라우저 프리징
+
+**학습 결과:**
+- ✅ "싱글쓰레드"의 정확한 의미 이해
+- ✅ Call Stack의 물리적 한계 확인
+- ✅ 에러 처리 메커니즘 이해
+
+---
+
 ## 다음 학습 계획
 
-### 레벨 1-A: 이벤트 루프와 실행 모델 (우선순위 1)
+### 레벨 1-A Phase 2: setTimeout과 Task Queue (다음 단계)
 
 **목표:**
 - "JS는 싱글쓰레드"의 정확한 의미 이해
