@@ -15,14 +15,52 @@
 
 ---
 
-### 레벨 1-A Phase 1: Call Stack (완료)
+### 레벨 1-A Phase 1: Call Stack (완료 ✅)
 
 **완료한 실험:**
 - ✅ 실험 1.1: 함수 호출의 물리적 실체
 - ✅ 실험 1.2: Call Stack의 한계 (Stack Overflow)
 - ✅ 실험 1.3: try/catch 없이 Stack Overflow
 
-**핵심 학습:**
+---
+
+### 레벨 1-A Phase 2: setTimeout과 Task Queue (진행 중 🔄)
+
+**완료한 실험:**
+- ✅ 실험 2.1: setTimeout(0)의 의미
+
+**진행 중인 실험:**
+- 🔄 실험 2.2: 블로킹 코드가 타이머에 미치는 영향
+
+**계획된 실험:**
+- ⏳ 실험 2.3: Microtask vs Macrotask
+
+**핵심 학습 (진행 중):**
+1. **setTimeout의 이중 성격**
+   - setTimeout 자체: 동기 함수 (즉시 실행 → return)
+   - setTimeout 콜백: 비동기 실행 (Task Queue → Call Stack이 비면 실행)
+
+2. **Task Queue와 Event Loop**
+   - Task Queue: 콜백이 대기하는 공간
+   - Event Loop: Call Stack이 비어있는지 확인 → Task Queue에서 콜백 가져옴
+   - Call Stack이 비어야만 Task Queue 확인 가능
+
+3. **setTimeout 시간의 의미**
+   - "0ms" = "최소 0ms 후, Call Stack이 비면 실행"
+   - 정확한 시간 보장 X, 최소 지연 시간만 보장
+
+4. **실험 2.1 핵심 발견**
+   - 출력 순서: A → C → B (B가 마지막)
+   - 이유: 콜백이 Call Stack이 비기를 기다림
+
+**학습 결과:**
+- ✅ setTimeout 자체 vs 콜백의 차이 명확히 이해
+- ✅ Task Queue와 Event Loop의 역할 이해
+- ✅ "비동기"의 정확한 의미 체득
+
+---
+
+**Phase 1 핵심 학습:**
 1. **Call Stack 기본 동작**
    - 함수 실행 → Call Stack에 쌓임
    - 함수 return → Call Stack에서 제거

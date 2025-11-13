@@ -177,26 +177,60 @@ render() → return → (Call Stack 비움)
 
 ---
 
-## Phase 2: setTimeout과 Task Queue (다음 단계)
+## Phase 2: setTimeout과 Task Queue (진행 중 🔄)
 
 ### 학습 목표
 - setTimeout(0)의 정확한 의미
 - Task Queue의 동작 원리
 - Call Stack과 Task Queue의 관계
+- Event Loop의 동작 메커니즘
 
-### 핵심 질문
+### 완료한 실험
+
+#### [실험 2.1: setTimeout(0)의 의미](experiments/experiment-2.1-settimeout-zero.md)
+**핵심 질문**: `setTimeout(fn, 0)`에서 `0`은 "즉시 실행"을 의미하는가?
+
+**배운 것**:
+- setTimeout **자체**는 동기 함수 → 즉시 실행되고 return
+- setTimeout의 **콜백**만 Task Queue에 등록되어 비동기로 실행
+- "0ms"의 의미: "최소 0ms 후, Call Stack이 비면 실행"
+- Event Loop가 Call Stack과 Task Queue를 중재
+
+**실험 결과**: 예측 일치 ✅
+- 출력 순서: A → C → B
+- B가 마지막인 이유: 콜백이 Call Stack이 비기를 기다림
+
+**핵심 발견**:
 ```javascript
-console.log('A');
 setTimeout(() => console.log('B'), 0);
-console.log('C');
-// 결과: A → C → B
-// 왜 B가 마지막?
+// ↑ setTimeout 호출: 동기 (즉시 실행 → return)
+// ↑ 콜백 실행: 비동기 (Task Queue → Call Stack이 비면 실행)
 ```
 
-### 실험 계획
-- 실험 2.1: setTimeout(0)의 배신
-- 실험 2.2: setTimeout이 정확히 0ms가 아닌 이유
-- 실험 2.3: 블로킹 코드가 타이머에 미치는 영향
+---
+
+### 진행 중인 실험
+
+#### [실험 2.2: 블로킹 코드가 타이머에 미치는 영향](experiments/experiment-2.2-blocking-timer.md)
+**핵심 질문**: Call Stack이 블로킹되어 있을 때, setTimeout의 타이머는 계속 진행되는가?
+
+**검증 사항**:
+- 타이머는 백그라운드에서 진행되는가?
+- Call Stack 블로킹이 타이머에 영향을 주는가?
+- setTimeout의 시간은 "정확한 시간"인가, "최소 시간"인가?
+
+---
+
+### 계획된 실험
+
+#### 실험 2.3: Microtask vs Macrotask
+**핵심 질문**: Promise와 setTimeout의 실행 순서는?
+
+```javascript
+setTimeout(() => console.log('setTimeout'));
+Promise.resolve().then(() => console.log('Promise'));
+// 순서는?
+```
 
 ---
 
@@ -206,12 +240,16 @@ console.log('C');
 level-1-event-loop/
 ├── README.md (현재 파일)
 ├── experiments/
-│   ├── experiment-1.1-call-stack-basics.md
+│   ├── experiment-1.1-call-stack-basics.md ✅
 │   ├── experiment-1.1.html
-│   ├── experiment-1.2-stack-overflow.md
+│   ├── experiment-1.2-stack-overflow.md ✅
 │   ├── experiment-1.2.html
-│   ├── experiment-1.3-uncaught-error.md
-│   └── experiment-1.3.html
+│   ├── experiment-1.3-uncaught-error.md ✅
+│   ├── experiment-1.3.html
+│   ├── experiment-2.1-settimeout-zero.md ✅
+│   ├── experiment-2.1.html
+│   ├── experiment-2.2-blocking-timer.md 🔄
+│   └── experiment-2.2.html
 └── docs/
     └── (미래: 개념 정리 문서)
 ```
@@ -221,9 +259,14 @@ level-1-event-loop/
 ## 참고 자료
 
 ### 완료한 실험 문서
+
+**Phase 1: Call Stack**
 - [실험 1.1: 함수 호출의 물리적 실체](experiments/experiment-1.1-call-stack-basics.md)
 - [실험 1.2: Call Stack의 한계](experiments/experiment-1.2-stack-overflow.md)
 - [실험 1.3: try/catch 없이 Stack Overflow](experiments/experiment-1.3-uncaught-error.md)
+
+**Phase 2: setTimeout과 Task Queue**
+- [실험 2.1: setTimeout(0)의 의미](experiments/experiment-2.1-settimeout-zero.md)
 
 ### 학습 도구
 - Chrome DevTools (Console, Sources)
@@ -231,13 +274,25 @@ level-1-event-loop/
 
 ---
 
-## 다음 단계로 가기 전 체크리스트
+## 학습 진행 체크리스트
 
+### Phase 1: Call Stack ✅
 - [x] Call Stack의 LIFO 구조 이해
 - [x] Stack Overflow 발생 조건 이해
 - [x] try/catch의 역할 이해
 - [x] Uncaught Error의 동작 이해
 - [x] 무한 재귀와 무한 리렌더링의 차이 이해
-- [ ] setTimeout과 비동기의 관계 (Phase 2)
-- [ ] Event Loop의 동작 원리 (Phase 2)
-- [ ] Microtask vs Macrotask (Phase 3)
+
+### Phase 2: setTimeout과 Task Queue 🔄
+- [x] setTimeout 자체 vs 콜백의 차이 이해
+- [x] Task Queue의 역할 이해
+- [x] Event Loop의 기본 동작 원리 이해
+- [x] setTimeout(0)의 정확한 의미 이해
+- [ ] 타이머와 Call Stack의 독립성 검증 (실험 2.2)
+- [ ] 블로킹 코드가 타이머에 미치는 영향 이해 (실험 2.2)
+- [ ] Microtask vs Macrotask (실험 2.3)
+
+### Phase 3: Promise와 Microtask (예정)
+- [ ] Promise의 동작 원리
+- [ ] Microtask Queue의 역할
+- [ ] Macrotask vs Microtask 우선순위

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>실험 2.2: 블로킹 코드가 타이머에 미치는 영향</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      max-width: 900px;
+      margin: 50px auto;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+
+    .container {
+      background-color: white;
+      border-radius: 8px;
+      padding: 30px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      color: #333;
+      border-bottom: 3px solid #007acc;
+      padding-bottom: 10px;
+    }
+
+    .section {
+      margin: 25px 0;
+      padding: 20px;
+      border-radius: 6px;
+    }
+
+    .prediction {
+      background-color: #fff3cd;
+      border-left: 4px solid #ffc107;
+    }
+
+    .code {
+      background-color: #f4f4f4;
+      border-left: 4px solid #666;
+      font-family: 'Courier New', monospace;
+      padding: 15px;
+      overflow-x: auto;
+    }
+
+    .result {
+      background-color: #d1ecf1;
+      border-left: 4px solid #17a2b8;
+    }
+
+    .instruction {
+      background-color: #d4edda;
+      border-left: 4px solid #28a745;
+    }
+
+    .warning {
+      background-color: #f8d7da;
+      border-left: 4px solid #dc3545;
+    }
+
+    h2 {
+      margin-top: 0;
+      color: #555;
+    }
+
+    pre {
+      margin: 10px 0;
+      white-space: pre-wrap;
+    }
+
+    .highlight {
+      background-color: #ffeb3b;
+      padding: 2px 4px;
+      font-weight: bold;
+    }
+
+    #timeline {
+      font-family: monospace;
+      background-color: #f9f9f9;
+      padding: 15px;
+      margin-top: 15px;
+      border-radius: 4px;
+      white-space: pre;
+    }
+
+    .freeze-indicator {
+      color: #dc3545;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>실험 2.2: 블로킹 코드가 타이머에 미치는 영향</h1>
+
+    <div class="section prediction">
+      <h2>📝 당신의 예측</h2>
+      <p><strong>핵심 질문:</strong> "timeout"은 언제 출력되는가?</p>
+      <p><strong>예측:</strong> 약 3초 후 (블로킹 완료 직후)</p>
+      <p><strong>핵심 논리:</strong></p>
+      <ul>
+        <li>setTimeout 자체는 즉시 실행 → 타이머 시작</li>
+        <li>타이머는 백그라운드에서 진행 (1초)</li>
+        <li>while 루프가 Call Stack 점유 (3초)</li>
+        <li>타이머 완료되지만 Call Stack이 비어있지 않아 실행 못함</li>
+        <li>while 완료 → Call Stack 비움 → 콜백 실행</li>
+      </ul>
+    </div>
+
+    <div class="section code">
+      <h2>💻 실험 코드</h2>
+      <pre>console.log('시작');
+setTimeout(() => console.log('timeout'), 1000);
+console.log('블로킹 시작');
+const start = Date.now();
+while (Date.now() - start < 3000) {} // 3초 블로킹
+console.log('블로킹 끝');</pre>
+    </div>
+
+    <div class="section warning">
+      <h2>⚠️ 주의사항</h2>
+      <p><strong>이 실험은 브라우저를 3초간 프리징시킵니다!</strong></p>
+      <ul>
+        <li>실행 중 브라우저가 응답하지 않음</li>
+        <li>마우스/키보드 입력 무시됨</li>
+        <li>3초 후 정상 복귀</li>
+        <li>이것이 "블로킹"의 의미입니다</li>
+      </ul>
+    </div>
+
+    <div class="section instruction">
+      <h2>🔍 관찰 포인트</h2>
+      <p><strong>개발자 도구를 열어주세요 (F12 또는 Cmd+Opt+I)</strong></p>
+      <ol>
+        <li>Console 탭에서 각 메시지의 <strong>타임스탬프</strong> 확인</li>
+        <li>"timeout"이 언제 출력되는지 정확히 측정</li>
+        <li>브라우저가 프리징되는 순간 체감</li>
+        <li>예측(3초 후)과 일치하는지 확인</li>
+      </ol>
+    </div>
+
+    <div class="section result">
+      <h2>✅ 실제 결과</h2>
+      <p>콘솔의 타임스탬프를 확인하세요!</p>
+      <div id="timeline"></div>
+    </div>
+  </div>
+
+  <script>
+    console.log("=== 실험 2.2 시작 ===\n");
+
+    const experimentStart = Date.now();
+
+    // 실험 코드
+    console.log('시작', `(${Date.now() - experimentStart}ms)`);
+
+    setTimeout(() => {
+      const timeoutTime = Date.now() - experimentStart;
+      console.log('timeout', `(${timeoutTime}ms)`);
+
+      document.getElementById('timeline').innerHTML +=
+        `\n"timeout" 출력: ${timeoutTime}ms\n` +
+        `예상: ~1000ms\n` +
+        `실제: ~3000ms\n` +
+        `\n<span class="highlight">결론: 타이머는 1초에 완료되었지만,\n` +
+        `Call Stack이 비는 3초까지 기다렸습니다!</span>`;
+    }, 1000);
+
+    console.log('블로킹 시작', `(${Date.now() - experimentStart}ms)`);
+    console.log('%c⚠️ 브라우저가 3초간 프리징됩니다...', 'color: red; font-weight: bold');
+
+    const blockStart = Date.now();
+    while (Date.now() - blockStart < 3000) {
+      // 3초 블로킹
+      // 이 동안 Call Stack은 비어있지 않음
+      // Event Loop는 Task Queue를 확인할 수 없음
+    }
+
+    const blockEnd = Date.now() - experimentStart;
+    console.log('블로킹 끝', `(${blockEnd}ms)`);
+
+    console.log("\n=== 실험 2.2 종료 ===");
+    console.log("\n분석:");
+    console.log("1. '시작'과 '블로킹 시작'은 거의 동시? (동기 코드)");
+    console.log("2. '블로킹 끝'은 약 3초 후?");
+    console.log("3. 'timeout'은 '블로킹 끝' 직후? (약 3초 후)");
+    console.log("4. 타이머는 1초였는데 왜 3초 후에 실행?");
+
+    // 타임라인 표시
+    document.getElementById('timeline').innerHTML =
+      `타임라인:\n` +
+      `0ms: 시작\n` +
+      `~0ms: setTimeout 실행 (타이머 시작)\n` +
+      `~0ms: 블로킹 시작\n` +
+      `~1000ms: 타이머 완료 (하지만 Call Stack 점유 중)\n` +
+      `~3000ms: 블로킹 끝 (Call Stack 비어짐)\n` +
+      `~3000ms: "timeout" 출력`;
+  </script>
+</body>
+</html>
